@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FastBurger.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220802124953_PopulandoTabelas")]
-    partial class PopulandoTabelas
+    [Migration("20220802141526_inicial")]
+    partial class inicial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -46,13 +46,13 @@ namespace FastBurger.Migrations
                     b.ToTable("Categorias");
                 });
 
-            modelBuilder.Entity("FastBurger.Models.Produto", b =>
+            modelBuilder.Entity("FastBurger.Models.Lanche", b =>
                 {
-                    b.Property<int>("ProdutoId")
+                    b.Property<int>("LancheId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProdutoId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LancheId"), 1L, 1);
 
                     b.Property<int>("CategoriaId")
                         .HasColumnType("int");
@@ -89,17 +89,17 @@ namespace FastBurger.Migrations
                     b.Property<decimal>("Preco")
                         .HasColumnType("decimal(10,2)");
 
-                    b.HasKey("ProdutoId");
+                    b.HasKey("LancheId");
 
                     b.HasIndex("CategoriaId");
 
                     b.ToTable("Lanches");
                 });
 
-            modelBuilder.Entity("FastBurger.Models.Produto", b =>
+            modelBuilder.Entity("FastBurger.Models.Lanche", b =>
                 {
                     b.HasOne("FastBurger.Models.Categoria", "Categoria")
-                        .WithMany("Produtos")
+                        .WithMany("Lanches")
                         .HasForeignKey("CategoriaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -109,7 +109,7 @@ namespace FastBurger.Migrations
 
             modelBuilder.Entity("FastBurger.Models.Categoria", b =>
                 {
-                    b.Navigation("Produtos");
+                    b.Navigation("Lanches");
                 });
 #pragma warning restore 612, 618
         }

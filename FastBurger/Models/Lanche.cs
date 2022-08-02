@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace FastBurger.Models
 {
     [Table("Lanches")]
-    public class Produto
+    public class Lanche
     {
-        public int ProdutoId { get; set; }
+        public int LancheId { get; set; }
 
         [Required(ErrorMessage ="Informe o nome do Lanche")]
         [Display(Name ="Nome do Lanche")]

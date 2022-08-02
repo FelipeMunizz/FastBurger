@@ -19,6 +19,6 @@ namespace FastBurger.Models
         public string? Descricao { get; set; }
 
         //Relacionamento 1:n
-        public List<Produto>? Produtos { get; set; }
+        public List<Lanche>? Lanches { get; set; }
     }
 }
