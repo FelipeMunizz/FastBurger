@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FastBurger.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220802141526_inicial")]
+    [Migration("20220804001249_inicial")]
     partial class inicial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
