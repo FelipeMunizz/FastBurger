@@ -1,19 +1,18 @@
-﻿@model IEnumerable<FastBurger.Models.Lanche>
+﻿@model LancheListViewModel
 
 @{
     ViewData["Title"] = "Lista de Lanches";
 }
 <div>
-    <h2>Todos os Lanches</h2>
+    <h2>@Model.CategoriaAtual</h2>
     <hr />
 </div>
 <div class="container">
     <div class="row">
-        @foreach (var lanche in Model)
+        @foreach (var lanche in Model.Lanches)
         {
-
             <div class="col-sm-4 col-md-4 col-lg-4">
-                <p><img class="img-fluid" src="@lanche.ImagemUrl" /></p>
+                <img src="~/images/Lanches/@lanche.ImagemUrl" class="img-fluid" />
                 <p><strong>Preço: @lanche.Preco.ToString("c")</strong></p>
                 <h4>@lanche.LancheNome</h4>
                 <p>@lanche.DescricaoCurta</p>

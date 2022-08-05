@@ -1,4 +1,5 @@
 ﻿using FastBurger.Repository.Interfaces;
+using FastBurger.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FastBurger.Controllers
@@ -13,8 +14,13 @@ namespace FastBurger.Controllers
 
         public IActionResult List()
         {
-            var lanches = _repository.Lanches;
-            return View(lanches);
+            //var lanches = _repository.Lanches;
+            //return View(lanches);
+            var lanchesListViewModel = new LancheListViewModel();
+            lanchesListViewModel.Lanches = _repository.Lanches;
+            lanchesListViewModel.CategoriaAtual = "Categoria Atual";
+
+            return View(lanchesListViewModel);
         }
     }
 }
