@@ -12,7 +12,7 @@
         @foreach (var lanche in Model.Lanches)
         {
             <div class="col-sm-4 col-md-4 col-lg-4">
-                <img src="~/images/Lanches/@lanche.ImagemUrl" class="img-fluid" />
+                <img src="~/images/Lanches/@lanche.ImagemUrl" class="img-fluid" width="50%"/>
                 <p><strong>Preço: @lanche.Preco.ToString("c")</strong></p>
                 <h4>@lanche.LancheNome</h4>
                 <p>@lanche.DescricaoCurta</p>
