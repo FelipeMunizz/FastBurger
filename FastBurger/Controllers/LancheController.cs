@@ -1,4 +1,5 @@
-﻿using FastBurger.Repository.Interfaces;
+﻿using FastBurger.Models;
+using FastBurger.Repository.Interfaces;
 using FastBurger.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,13 +13,38 @@ namespace FastBurger.Controllers
             _repository = repository;
         }
 
-        public IActionResult List()
+        public IActionResult List(string categoria)
         {
-            //var lanches = _repository.Lanches;
-            //return View(lanches);
-            var lanchesListViewModel = new LancheListViewModel();
-            lanchesListViewModel.Lanches = _repository.Lanches;
-            lanchesListViewModel.CategoriaAtual = "Categoria Atual";
+            IEnumerable<Lanche> lanches;
+            string categoriaAtual = string.Empty;
+
+            if (string.IsNullOrEmpty(categoria))
+            {
+                lanches = _repository.Lanches.OrderBy(l => l.LancheId);
+                categoriaAtual = "Todos os lanches";
+            }
+            else
+            {
+                if (string.Equals("Hamburguer", categoria, StringComparison.OrdinalIgnoreCase))
+                {
+                    lanches = _repository.Lanches
+                        .Where(l => l.Categoria.CategoriaNome.Equals("Hamburguer"))
+                        .OrderBy(l => l.LancheNome);
+                }
+                else
+                {
+                    lanches = _repository.Lanches
+                       .Where(l => l.Categoria.CategoriaNome.Equals("Hamburguer"))
+                       .OrderBy(l => l.LancheNome);
+                }
+                categoriaAtual = categoria;
+            }
+
+            var lanchesListViewModel = new LancheListViewModel
+            {
+                Lanches = lanches,
+                CategoriaAtual = categoriaAtual
+            };
 
             return View(lanchesListViewModel);
         }
