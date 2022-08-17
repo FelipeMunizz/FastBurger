@@ -39,5 +39,11 @@ namespace FastBurger.Controllers
 
             return View(lanchesListViewModel);
         }
+
+        public IActionResult Details(int lancheId)
+        {
+            var lanche = _repository.Lanches.FirstOrDefault(l => l.LancheId == lancheId);
+            return View(lanche);
+        }
     }
 }

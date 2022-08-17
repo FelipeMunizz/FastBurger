@@ -19,28 +19,31 @@ namespace FastBurger.Controllers
         {
             var itens = _carrinhoCompra.GetCarrinhoCompraItens();
             _carrinhoCompra.CarrinhoCompraItens = itens;
-            var carrinhoCompraVm = new CarrinhoCompraViewModel
+
+            var carrinhoCompraVM = new CarrinhoCompraViewModel
             {
                 CarrinhoCompra = _carrinhoCompra,
                 CarrinhoCompraTotal = _carrinhoCompra.GetCarrinhoCompraTotal()
             };
-            return View(carrinhoCompraVm);
+
+            return View(carrinhoCompraVM);
         }
-
-        public RedirectToActionResult AdicionarItemNoCarrinhoCompra(int lancheId)
+        public IActionResult AdicionarItemNoCarrinhoCompra(int lancheId)
         {
-            var lancheSelecionado = _lancheRepository.Lanches.FirstOrDefault(p => p.LancheId == lancheId);
+            var lancheSelecionado = _lancheRepository.Lanches
+                                    .FirstOrDefault(p => p.LancheId == lancheId);
 
-            if(lancheSelecionado != null)
+            if (lancheSelecionado != null)
             {
                 _carrinhoCompra.AdicionarAoCarrinho(lancheSelecionado);
             }
             return RedirectToAction("Index");
         }
 
-        public RedirectToActionResult RemoverItemDoCarrinhoCompra(int lancheId)
+        public IActionResult RemoverItemDoCarrinho(int lancheId)
         {
-            var lancheSelecionado = _lancheRepository.Lanches.FirstOrDefault(p => p.LancheId == lancheId);
+            var lancheSelecionado = _lancheRepository.Lanches
+                                    .FirstOrDefault(p => p.LancheId == lancheId);
 
             if (lancheSelecionado != null)
             {
