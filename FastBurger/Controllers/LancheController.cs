@@ -25,18 +25,9 @@ namespace FastBurger.Controllers
             }
             else
             {
-                if (string.Equals("Hamburguer", categoria, StringComparison.OrdinalIgnoreCase))
-                {
-                    lanches = _repository.Lanches
-                        .Where(l => l.Categoria.CategoriaNome.Equals("Hamburguer"))
-                        .OrderBy(l => l.LancheNome);
-                }
-                else
-                {
-                    lanches = _repository.Lanches
-                       .Where(l => l.Categoria.CategoriaNome.Equals("Hamburguer"))
-                       .OrderBy(l => l.LancheNome);
-                }
+                lanches = _repository.Lanches
+                    .Where(l => l.Categoria.CategoriaNome.Equals(categoria))
+                    .OrderBy(l => l.LancheNome);
                 categoriaAtual = categoria;
             }
 
