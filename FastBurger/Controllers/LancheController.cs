@@ -45,5 +45,32 @@ namespace FastBurger.Controllers
             var lanche = _repository.Lanches.FirstOrDefault(l => l.LancheId == lancheId);
             return View(lanche);
         }
+
+        public ViewResult Search(string searchString)
+        {
+            IEnumerable<Lanche> lanches;
+            string categoriaAtual = string.Empty;
+
+            if (string.IsNullOrEmpty("searchString"))
+            {
+                lanches = _repository.Lanches.OrderBy(p => p.LancheId);
+                categoriaAtual = "Todos os Lanches";
+            }
+            else
+            {
+                lanches = _repository.Lanches
+                    .Where(p => p.LancheNome.ToLower().Contains(searchString.ToLower()));
+
+                if (lanches.Any())
+                    categoriaAtual = "Lanches";
+                else
+                    categoriaAtual = "Nenhum Lanche Encontrado";
+            }
+            return View("~/Views/Lanche/List.cshtml", new LancheListViewModel
+            {
+                Lanches = lanches,
+                CategoriaAtual = categoriaAtual
+            });
+        }
     }
 }
