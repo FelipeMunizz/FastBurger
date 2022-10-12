@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace FastBurger.Components
+namespace FastBurger.Controllers
 {
     public class ContatoController : Controller
     {

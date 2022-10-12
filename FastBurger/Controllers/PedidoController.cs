@@ -2,7 +2,7 @@
 using FastBurger.Repository.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
-namespace FastBurger.Components
+namespace FastBurger.Controllers
 {
     public class PedidoController : Controller
     {
@@ -33,13 +33,13 @@ namespace FastBurger.Components
             _carrinhoCompra.CarrinhoCompraItens = itens;
 
             //verifica se existem itens de pedido
-            if(_carrinhoCompra.CarrinhoCompraItens.Count == 0)
+            if (_carrinhoCompra.CarrinhoCompraItens.Count == 0)
             {
                 ModelState.AddModelError("", "Carrinho Vazio");
             }
 
             //calcula o total de intens e o total do pedido
-            foreach(var item in itens)
+            foreach (var item in itens)
             {
                 totalItensPedido += item.Quantidade;
                 precoTotalPedido += item.Lanche.Preco * item.Quantidade;
