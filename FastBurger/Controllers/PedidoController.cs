@@ -66,7 +66,7 @@ namespace FastBurger.Controllers
                 _carrinhoCompra.LimparCarrinho();
 
                 //exibe a view com dados do cliente e do pedido
-                return View("~/Pedido/CheckoutCompleto.cshtml", pedido);
+                return View("~/Views/Pedido/CheckoutCompleto.cshtml", pedido);
             }
             return View(pedido);
             #endregion
