@@ -16,6 +16,7 @@ public class AccountController : Controller
         _signInManager = signInManager;
     }
 
+    #region Login
     public IActionResult Login(string returnUrl)
     {
         return View(new LoginViewModel()
@@ -47,4 +48,32 @@ public class AccountController : Controller
         ModelState.AddModelError("", "Falha ao realizar o login!!");
         return View(loginVM);
     }
+    #endregion
+
+    #region Registro
+    public IActionResult Register()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Register(LoginViewModel registroVM)
+    {
+        if (ModelState.IsValid)
+        {
+            var user = new IdentityUser { UserName = registroVM.UserName };
+            var result = await _userManager.CreateAsync(user, registroVM.Password);
+
+            if (result.Succeeded)
+            {
+                await _signInManager.SignInAsync(user, isPersistent: false);
+                return RedirectToAction("Login", "Account");
+            }
+            else
+                this.ModelState.AddModelError("Registro", "Falha ao registrar o Usuário");
+        }
+        return View(registroVM);
+    }
+    #endregion
 }
