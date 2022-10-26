@@ -1,5 +1,6 @@
 ﻿using FastBurger.Models;
 using FastBurger.Repository.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FastBurger.Controllers
@@ -15,11 +16,14 @@ namespace FastBurger.Controllers
             _carrinhoCompra = carrinhoCompra;
         }
 
+        #region Checkout
+        [Authorize]
         public IActionResult Checkout()
         {
             return View();
         }
 
+        [Authorize]
         [HttpPost]
         public IActionResult Checkout(Pedido pedido)
         {
@@ -71,5 +75,8 @@ namespace FastBurger.Controllers
             return View(pedido);
             #endregion
         }
+        #endregion
+        
+        
     }
 }

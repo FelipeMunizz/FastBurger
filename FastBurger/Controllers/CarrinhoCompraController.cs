@@ -1,6 +1,7 @@
 ﻿using FastBurger.Models;
 using FastBurger.Repository.Interfaces;
 using FastBurger.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FastBurger.Controllers
@@ -28,6 +29,8 @@ namespace FastBurger.Controllers
 
             return View(carrinhoCompraVM);
         }
+
+        [Authorize]
         public IActionResult AdicionarItemNoCarrinhoCompra(int lancheId)
         {
             var lancheSelecionado = _lancheRepository.Lanches
@@ -40,6 +43,7 @@ namespace FastBurger.Controllers
             return RedirectToAction("Index");
         }
 
+        [Authorize]
         public IActionResult RemoverItemDoCarrinho(int lancheId)
         {
             var lancheSelecionado = _lancheRepository.Lanches
