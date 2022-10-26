@@ -16,6 +16,7 @@ namespace FastBurger.Controllers
             _carrinhoCompra = carrinhoCompra;
         }
 
+        #region Get Carrinho Compra
         public IActionResult Index()
         {
             var itens = _carrinhoCompra.GetCarrinhoCompraItens();
@@ -29,7 +30,9 @@ namespace FastBurger.Controllers
 
             return View(carrinhoCompraVM);
         }
+        #endregion
 
+        #region Adiciona Item Ao Carrinho
         [Authorize]
         public IActionResult AdicionarItemNoCarrinhoCompra(int lancheId)
         {
@@ -42,7 +45,9 @@ namespace FastBurger.Controllers
             }
             return RedirectToAction("Index");
         }
+        #endregion
 
+        #region Remove Item do Carrinho
         [Authorize]
         public IActionResult RemoverItemDoCarrinho(int lancheId)
         {
@@ -55,5 +60,6 @@ namespace FastBurger.Controllers
             }
             return RedirectToAction("Index");
         }
+        #endregion
     }
 }

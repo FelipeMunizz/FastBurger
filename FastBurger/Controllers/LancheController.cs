@@ -13,6 +13,7 @@ namespace FastBurger.Controllers
             _repository = repository;
         }
 
+        #region Lista todos os Lanches ou Produtos
         public IActionResult List(string categoria)
         {
             IEnumerable<Lanche> lanches;
@@ -39,13 +40,17 @@ namespace FastBurger.Controllers
 
             return View(lanchesListViewModel);
         }
+        #endregion
 
+        #region Detalhes dos Lanches ou Produtos
         public IActionResult Details(int lancheId)
         {
             var lanche = _repository.Lanches.FirstOrDefault(l => l.LancheId == lancheId);
             return View(lanche);
         }
+        #endregion
 
+        #region Busca Lanches ou Produtos
         public ViewResult Search(string searchString)
         {
             IEnumerable<Lanche> lanches;
@@ -72,5 +77,6 @@ namespace FastBurger.Controllers
                 CategoriaAtual = categoriaAtual
             });
         }
+        #endregion
     }
 }
