@@ -32,6 +32,10 @@
                             @await Component.InvokeAsync("CarrinhoCompraResumo")
                         </li>
                         @await Html.PartialAsync("_LoginPartial")
+                        @if(User.IsInRole("Admin"))
+                        {
+                            <a class="nav-link text-light" asp-area="Admin" asp-controller="Admin" asp-action="Index">Administração</a>
+                        }
                         <li class="nav-item">
                             <form class="navbar-form navb-right" asp-controller="Lanche" asp-action="Search" method="get">
                                 <div class="form-group">
