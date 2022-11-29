@@ -20,7 +20,7 @@
                 {
                     <tr>
                         <td class="text-center">@item.Quantidade</td>
-                        <td class="text-center">@item.Lanche</td>
+                        <td class="text-center">@item.Lanche.LancheNome</td>
                         <td class="text-right">@item.Lanche.Preco.ToString("c")</td>
                         <td class="text-right">@((item.Quantidade * item.Lanche.Preco).ToString("c"))</td>
                         <td>

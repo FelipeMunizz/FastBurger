@@ -1,3 +1,13 @@
+﻿using Microsoft.EntityFrameworkCore.Migrations;
+
+#nullable disable
+
+namespace FastBurger.Migrations
+{
+    /// <inheritdoc />
+    public partial class migrationPopulationTables : Migration
+    {
+        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.Sql("INSERT INTO  Categorias(CategoriaNome, Descricao)" +
@@ -17,8 +27,11 @@
                 "VALUES(1,'Dublo Bacon',35.99,'Dois Hamburguer artesanal(120g), queijo, barbecue e bacon','Dois suculentos hambúrgueres artesanais de 120g com fatias de queijo prato, pão brioche, molho barbecue e bacon fatiado crocante','duplobacon.jpg','duplobacon.png',0,1)");
         }
 
+        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.Sql("DELETE FROM Categorias");
-	    migrationBuilder.Sql("DELETE FROM Lanches");
+            migrationBuilder.Sql("DELETE FROM Lanches");
         }
+    }
+}
