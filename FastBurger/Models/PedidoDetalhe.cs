@@ -9,7 +9,7 @@ namespace FastBurger.Models
         public int LancheId { get; set; }
         public int Quantidade { get; set; }
 
-        [Column(TypeName ="decimal(18,2)")]
+        [Column(TypeName = "decimal(18,2)")]
         public decimal Preco { get; set; }
 
 

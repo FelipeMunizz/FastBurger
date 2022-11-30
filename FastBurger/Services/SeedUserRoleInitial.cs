@@ -34,7 +34,7 @@ namespace FastBurger.Services
 
         public void SeedUser()
         {
-            if(_userManager.FindByEmailAsync("usuario@localhost").Result == null)
+            if (_userManager.FindByEmailAsync("usuario@localhost").Result == null)
             {
                 IdentityUser user = new IdentityUser();
                 user.UserName = "usuario@localhost";
@@ -44,7 +44,7 @@ namespace FastBurger.Services
                 user.EmailConfirmed = true;
                 user.LockoutEnabled = false;
                 user.SecurityStamp = Guid.NewGuid().ToString();
-                IdentityResult result = _userManager.CreateAsync(user,"Numsey@2022").Result;
+                IdentityResult result = _userManager.CreateAsync(user, "Numsey@2022").Result;
 
                 if (result.Succeeded)
                     _userManager.AddToRoleAsync(user, "Member").Wait();

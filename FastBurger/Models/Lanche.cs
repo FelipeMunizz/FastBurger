@@ -8,15 +8,15 @@ namespace FastBurger.Models
     {
         public int LancheId { get; set; }
 
-        [Required(ErrorMessage ="Informe o nome do Lanche")]
-        [Display(Name ="Nome do Lanche")]
-        [StringLength(80, MinimumLength = 5, ErrorMessage ="O {0} deve ter no mínimo {1} caracteres e no máximo {2} caracteres.")]
+        [Required(ErrorMessage = "Informe o nome do Lanche")]
+        [Display(Name = "Nome do Lanche")]
+        [StringLength(80, MinimumLength = 5, ErrorMessage = "O {0} deve ter no mínimo {1} caracteres e no máximo {2} caracteres.")]
         public string? LancheNome { get; set; }
 
-        [Required(ErrorMessage ="Informe o preço do lanche.")]
-        [Display(Name ="Preço")]
-        [Column(TypeName ="decimal(10,2)")]
-        [Range(1,999.99, ErrorMessage ="O preço deve ser entre R$1,00 e R$999,99")]
+        [Required(ErrorMessage = "Informe o preço do lanche.")]
+        [Display(Name = "Preço")]
+        [Column(TypeName = "decimal(10,2)")]
+        [Range(1, 999.99, ErrorMessage = "O preço deve ser entre R$1,00 e R$999,99")]
         public decimal Preco { get; set; }
 
         [Required(ErrorMessage = "Informe uma descrição do lanche")]
@@ -29,18 +29,18 @@ namespace FastBurger.Models
         [StringLength(200, MinimumLength = 20, ErrorMessage = "O {0} deve ter no mínimo {1} caracteres e no máximo {2} caracteres.")]
         public string? DescricaoDetalhada { get; set; }
 
-        [Display(Name ="Caminho Imagem Normal")]
-        [StringLength(200, ErrorMessage ="O {0} deve ter no máximo {1}")]
+        [Display(Name = "Caminho Imagem Normal")]
+        [StringLength(200, ErrorMessage = "O {0} deve ter no máximo {1}")]
         public string? ImagemUrl { get; set; }
 
         [Display(Name = "Caminho Imagem Miniatura")]
         [StringLength(200, ErrorMessage = "O {0} deve ter no máximo {1}")]
         public string? ImagemThumbnailUrl { get; set; }
 
-        [Display(Name ="Preferido?")]
+        [Display(Name = "Preferido?")]
         public bool IsLanchePreferido { get; set; }
-        
-        [Display(Name ="Estoque")]
+
+        [Display(Name = "Estoque")]
         public bool EmEstoque { get; set; }
 
         //Relacionamento 1:n

@@ -23,7 +23,7 @@ namespace FastBurger.Repository
 
             var carrinhoCompraItens = _carrinhoCompra.CarrinhoCompraItens;
 
-            foreach(var carrinhoItem in carrinhoCompraItens)
+            foreach (var carrinhoItem in carrinhoCompraItens)
             {
                 var pedidoDetail = new PedidoDetalhe()
                 {

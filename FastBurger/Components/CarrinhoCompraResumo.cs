@@ -16,7 +16,7 @@ namespace FastBurger.Components
         public IViewComponentResult Invoke()
         {
             var itens = _carrinhoCompra.GetCarrinhoCompraItens();
-            
+
             _carrinhoCompra.CarrinhoCompraItens = itens;
 
             var carrinhoCompraVW = new CarrinhoCompraViewModel

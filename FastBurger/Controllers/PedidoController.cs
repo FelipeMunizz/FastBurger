@@ -15,7 +15,7 @@ namespace FastBurger.Controllers
             _pedidoRepository = pedidoRepository;
             _carrinhoCompra = carrinhoCompra;
         }
-       
+
         [Authorize]
         public IActionResult Checkout()
         {
@@ -73,6 +73,6 @@ namespace FastBurger.Controllers
             }
             return View(pedido);
             #endregion
-        }    
+        }
     }
 }
