@@ -13,10 +13,13 @@
 
 <form method="get" class="form-inline">
     <input name="filter" class="form-control col-md" placeholder="Pesquise um Produto" value="@Model.RouteValue?["Filter"]"/>
+    <br />
     <button type="submit" class="btn btn-info">Pesquisar</button>
 </form>
+<br />
 
 <strong>Total de Produtos: </strong> @Model?.TotalRecordCount
+
 <div>
     <vc:pager paging-list="@Model"></vc:pager>
 </div>
