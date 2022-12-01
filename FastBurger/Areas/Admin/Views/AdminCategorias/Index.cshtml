@@ -1,13 +1,13 @@
 ﻿@model IEnumerable<FastBurger.Models.Categoria>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Categorias";
 }
 
 <h1>Categorias</h1>
 
 <p>
-    <a asp-action="Create">Criar Nova Categoria</a>
+    <a class="btn btn-primary" asp-action="Create">Adicionar Categoria</a>
 </p>
 <table class="table">
     <thead>
@@ -31,9 +31,9 @@
                 @Html.DisplayFor(modelItem => item.Descricao)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.CategoriaId">Editar</a> |
-                <a asp-action="Details" asp-route-id="@item.CategoriaId">Detalhes</a> |
-                <a asp-action="Delete" asp-route-id="@item.CategoriaId">Deletar</a>
+                <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.CategoriaId">Editar</a> 
+                <a class="btn btn-info" asp-action="Details" asp-route-id="@item.CategoriaId">Detalhes</a> 
+                <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.CategoriaId">Deletar</a>
             </td>
         </tr>
 }

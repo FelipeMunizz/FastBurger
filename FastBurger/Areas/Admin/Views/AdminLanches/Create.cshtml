@@ -1,15 +1,13 @@
 ﻿@model FastBurger.Models.Lanche
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Adicionar Produto";
 }
 
-<h1>Create</h1>
-
-<h4>Lanche</h4>
+<h1>Adicionar Produto</h1>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-lg">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
@@ -57,13 +55,13 @@
                 <select asp-for="CategoriaId" class ="form-control" asp-items="ViewBag.CategoriaId"></select>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Adicionar" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
-
+<br />
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a class="btn btn-primary" asp-action="Index">Voltar a Lista</a>
 </div>
 

@@ -1,13 +1,12 @@
 ﻿@model FastBurger.Models.Lanche
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalhes Produto";
 }
 
-<h1>Details</h1>
+<h1>Detalhes Produto</h1>
 
 <div>
-    <h4>Lanche</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -67,6 +66,6 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.LancheId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a class="btn btn-success" asp-action="Edit" asp-route-id="@Model?.LancheId">Editar</a> 
+    <a class="btn btn-primary" asp-action="Index">Voltar a Lista</a>
 </div>
