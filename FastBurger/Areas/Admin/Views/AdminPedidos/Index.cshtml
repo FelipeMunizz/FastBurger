@@ -1,13 +1,31 @@
-﻿@model IEnumerable<FastBurger.Models.Pedido>
+﻿@model ReflectionIT.Mvc.Paging.PagingList<FastBurger.Models.Pedido>
 
 @{
-    ViewData["Title"] = "Lista de Pedidos";
+    ViewData["Title"] = "Pedidos";
 }
 
-<h1>Lista de Pedidos</h1>
+<h1>Pedidos</h1>
+
 <p>
-    <a class="btn btn-primary" asp-action="Create">Adicionar Produto</a>
+    <a class="btn btn-primary" asp-action="Create">Adicionar Pedido</a>
 </p>
+<hr />
+
+<form method="get" class="form-inline">
+    <input name="filter" class="form-control col-md" placeholder="Pesquise um Pedido" value="@Model.RouteValue?["Filter"]" />
+    <br />
+    <button type="submit" class="btn btn-info">Pesquisar</button>
+</form>
+
+<br />
+<p>
+    <strong>Total de Pedidos: </strong> @Model?.TotalRecordCount
+</p>
+
+<div>
+    <vc:pager paging-list="@Model"></vc:pager>
+</div>
+
 <table class="table">
     <thead>
         <tr>
