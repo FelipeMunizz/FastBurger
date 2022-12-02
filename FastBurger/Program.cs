@@ -1,3 +1,4 @@
+using FastBurger.Areas.Admin.Services;
 using FastBurger.Data;
 using FastBurger.Models;
 using FastBurger.Repository;
@@ -24,6 +25,7 @@ builder.Services.AddTransient<ICategoriaRepository, CategoriaRepository>();
 builder.Services.AddTransient<ILancheRepository, LancheRepository>();
 builder.Services.AddTransient<IPedidoRepository, PedidoRepository>();
 builder.Services.AddScoped<ISeedUserRoleInitial, SeedUserRoleInitial>();
+builder.Services.AddScoped<RelatorioVendaService>();
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("Admin",
