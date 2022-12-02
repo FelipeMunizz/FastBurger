@@ -21,10 +21,11 @@
 <hr />
 <div class="panel panel-primary">
     <div class="panel-heading">
-        <h3 class="panel-title">Total de Pedidos = @Model.Count()</h3>
-        <h3 class="panel-title">Total de Lanches nos Pedidos = @Model.Sum(obj => obj.TotalItensPedido).ToString()</h3>
-        <h3 class="panel-title">Valor Total dos Pedidos = @Model.Sum(obj => obj.PedidoTotal).ToString("c")</h3>
+        <h5 class="panel-title">Total de Pedidos = @Model.Count()</h5>
+        <h5 class="panel-title">Total de Lanches nos Pedidos = @Model.Sum(obj => obj.TotalItensPedido).ToString()</h5>
+        <h5 class="panel-title">Valor Total dos Pedidos = @Model.Sum(obj => obj.PedidoTotal).ToString("c")</h5>
     </div>
+    <hr />
     <div class="panel-body">
         <table class="table table-striped table-hover">
             <thead>
