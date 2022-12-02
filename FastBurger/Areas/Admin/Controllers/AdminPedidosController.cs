@@ -1,5 +1,6 @@
 ﻿using FastBurger.Data;
 using FastBurger.Models;
+using FastBurger.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -150,6 +151,27 @@ namespace LanchesMac.Areas.Admin.Controllers
             _context.Pedidos.Remove(pedido);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult PedidoLanches(int? id)
+        {
+            var pedido = _context.Pedidos
+                .Include(pd => pd.PedidoItens)
+                .ThenInclude(l => l.Lanche)
+                .FirstOrDefault(p => p.PedidoId == id);
+
+            if(pedido == null)
+            {
+                Response.StatusCode = 404;
+                return View("PedidoNotFound", id.Value);
+            }
+
+            PedidoLancheViewModel pedidoLanche = new PedidoLancheViewModel()
+            {
+                Pedido = pedido,
+                PedidoDetalhes = pedido.PedidoItens
+            };
+            return View(pedidoLanche);                
         }
 
         private bool PedidoExists(int id)
