@@ -13,6 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+#region Configuration
 string? connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
 
@@ -20,11 +21,18 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
 
+builder.Services.Configure<ConfigurationImagens>(builder.Configuration.GetSection("ConfigurationPastaImagens"));
+#endregion
+
+#region Injeção de Dependências
 builder.Services.AddTransient<ICategoriaRepository, CategoriaRepository>();
 builder.Services.AddTransient<ILancheRepository, LancheRepository>();
 builder.Services.AddTransient<IPedidoRepository, PedidoRepository>();
 builder.Services.AddScoped<ISeedUserRoleInitial, SeedUserRoleInitial>();
 builder.Services.AddScoped<RelatorioVendaService>();
+builder.Services.AddScoped(sp => CarrinhoCompra.GetCarrinho(sp));
+#endregion
+
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("Admin",
@@ -33,7 +41,7 @@ builder.Services.AddAuthorization(options =>
             politica.RequireRole("Admin");
         });
 });
-builder.Services.AddScoped(sp => CarrinhoCompra.GetCarrinho(sp));
+
 
 builder.Services.AddControllersWithViews();
 
