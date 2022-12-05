@@ -1,4 +1,4 @@
-﻿@model ReflectionIT.Mvc.Paging.PagingList<FastBurger.Models.Lanche>
+﻿@model IEnumerable<FastBurger.Models.Lanche>
 
 @{
     ViewData["Title"] = "Produtos";
@@ -11,18 +11,17 @@
 </p>
 <hr />
 
-<form method="get" class="form-inline">
-    <input name="filter" class="form-control col-md" placeholder="Pesquise um Produto" value="@Model.RouteValue?["Filter"]"/>
-    <br />
-    <button type="submit" class="btn btn-info">Pesquisar</button>
+<form method="get" asp-action="Index" class="form-inline">
+    <div class="form-actions no-color">
+        <input type="text" name="SearchString" class="form-control col-md" placeholder="Pesquise um Produto" value="@ViewData["CurrentFilter"]" />
+        <br />
+        <input type="submit" value="Pesquisar" class="btn btn-outline-primary" />
+    </div>
 </form>
+
 <br />
 
-<strong>Total de Produtos: </strong> @Model?.TotalRecordCount
-
-<div>
-    <vc:pager paging-list="@Model"></vc:pager>
-</div>
+<strong>Total de Produtos: </strong> @Model?.Count()
 
 <table class="table">
     <thead>

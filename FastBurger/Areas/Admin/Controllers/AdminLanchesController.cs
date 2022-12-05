@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using ReflectionIT.Mvc.Paging;
 
 namespace LanchesMac.Areas.Admin.Controllers
 {
@@ -20,17 +19,16 @@ namespace LanchesMac.Areas.Admin.Controllers
         }
 
         // GET: Admin/AdminLanches
-        public async Task<IActionResult> Index(string filter, int pageindex = 1, string sort = "LancheNome")
+        public async Task<IActionResult> Index(string searchString)
         {
-            var result = _context.Lanches.Include(l => l.Categoria).AsQueryable();
-            if (!string.IsNullOrWhiteSpace(filter))
-            {
-                result = result.Where(p => p.LancheNome.Contains(filter));
-            }
-            var model = await PagingList.CreateAsync(result, 5, pageindex, sort, "LancheNome");
-            model.RouteValue = new RouteValueDictionary { { "filter", filter } };
+            ViewData["CurrentFilter"] = searchString;
 
-            return View(model);
+            var result = _context.Lanches.AsQueryable();
+
+            if (!String.IsNullOrEmpty(searchString))
+                result = result.Where(p => p.LancheNome.Contains(searchString));
+
+            return View(await result.AsNoTracking().ToListAsync());
         }
 
         // GET: Admin/AdminLanches/Details/5
