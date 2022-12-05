@@ -28,16 +28,6 @@ namespace LanchesMac.Areas.Admin.Controllers
                 result = result.Where(p => p.Nome.Contains(searchString));
 
             return View(await result.AsNoTracking().ToListAsync());
-            // parametros do metodo => string filter, int pageindex = 1, string sort = "Nome"
-            //var result = _context.Pedidos.AsNoTracking().AsQueryable();
-            //if (!string.IsNullOrWhiteSpace(filter))
-            //{
-            //    result = result.Where(p => p.Nome.Contains(filter));
-            //}
-            //var model = await PagingList.CreateAsync(result, 5, pageindex, sort, "Nome");
-            //model.RouteValue = new RouteValueDictionary { { "filter", filter } };
-
-            //return View(model);
         }
 
         // GET: Admin/AdminPedidos/Details/5
