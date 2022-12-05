@@ -1,5 +1,6 @@
 ﻿using FastBurger.Data;
 using FastBurger.Models;
+using FastBurger.Pagination;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -19,16 +20,26 @@ namespace LanchesMac.Areas.Admin.Controllers
         }
 
         // GET: Admin/AdminLanches
-        public async Task<IActionResult> Index(string searchString)
+        public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? pageNumber)
         {
+            ViewData["CurrentSort"] = sortOrder;
             ViewData["CurrentFilter"] = searchString;
 
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
             var result = _context.Lanches.AsQueryable();
 
             if (!String.IsNullOrEmpty(searchString))
                 result = result.Where(p => p.LancheNome.Contains(searchString));
 
-            return View(await result.AsNoTracking().ToListAsync());
+            int pageSize = 5;
+            return View(await PaginatedList<Lanche>.CreateAsync(result.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
         // GET: Admin/AdminLanches/Details/5

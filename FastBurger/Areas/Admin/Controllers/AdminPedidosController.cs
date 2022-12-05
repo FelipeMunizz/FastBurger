@@ -1,5 +1,6 @@
 ﻿using FastBurger.Data;
 using FastBurger.Models;
+using FastBurger.Pagination;
 using FastBurger.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -18,16 +19,26 @@ namespace LanchesMac.Areas.Admin.Controllers
         }
 
         // GET: Admin/AdminPedidos
-        public async Task<IActionResult> Index(string searchString)
+        public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? pageNumber)
         {
+            ViewData["CurrentSort"] = sortOrder;
             ViewData["CurrentFilter"] = searchString;
 
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
             var result = _context.Pedidos.AsQueryable();
 
             if (!String.IsNullOrEmpty(searchString))
                 result = result.Where(p => p.Nome.Contains(searchString));
 
-            return View(await result.AsNoTracking().ToListAsync());
+            int pageSize = 5;
+            return View(await PaginatedList<Pedido>.CreateAsync(result.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
         // GET: Admin/AdminPedidos/Details/5

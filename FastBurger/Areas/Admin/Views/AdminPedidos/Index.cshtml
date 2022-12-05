@@ -1,4 +1,4 @@
-﻿@model IEnumerable<FastBurger.Models.Pedido>
+﻿@model PaginatedList<FastBurger.Models.Pedido>
 
 @{
     ViewData["Title"] = "Pedidos";
@@ -29,22 +29,22 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Nome)
+                Nome
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Sobrenome)
+                Sobrenome
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Telefone)
+                Telefone
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Email)
+                Email
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PedidoEnviado)
+                PedidoEnviado
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PedidoEntregueEm)
+                PedidoEntregueEm
             </th>
             <th></th>
         </tr>
@@ -81,3 +81,23 @@
         }
     </tbody>
 </table>
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PageIndex - 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @prevDisabled">
+    Anterior
+</a>
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PageIndex + 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @nextDisabled">
+    Proxima
+</a>

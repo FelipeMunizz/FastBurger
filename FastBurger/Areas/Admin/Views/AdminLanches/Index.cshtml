@@ -1,4 +1,4 @@
-﻿@model IEnumerable<FastBurger.Models.Lanche>
+﻿@model PaginatedList<FastBurger.Models.Lanche>
 
 @{
     ViewData["Title"] = "Produtos";
@@ -27,19 +27,19 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.LancheNome)
+                Nome
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Preco)
+                Preço
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.IsLanchePreferido)
+                Preferido
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.EmEstoque)
+                Estoque
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Categoria)
+                Categoria
             </th>
             <th></th>
         </tr>
@@ -72,3 +72,23 @@
         }
     </tbody>
 </table>
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PageIndex - 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @prevDisabled">
+    Anterior
+</a>
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PageIndex + 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @nextDisabled">
+    Proxima
+</a>
