@@ -4,8 +4,6 @@ using FastBurger.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using ReflectionIT.Mvc.Paging;
-
 namespace LanchesMac.Areas.Admin.Controllers
 {
     [Area("Admin")]
@@ -20,17 +18,16 @@ namespace LanchesMac.Areas.Admin.Controllers
         }
 
         // GET: Admin/AdminPedidos
-        public async Task<IActionResult> Index(string filter, int pageindex = 1, string sort = "Nome")
+        public async Task<IActionResult> Index(string searchString)
         {
-            var result = _context.Pedidos.AsNoTracking().AsQueryable();
-            if (!string.IsNullOrWhiteSpace(filter))
-            {
-                result = result.Where(p => p.Nome.Contains(filter));
-            }
-            var model = await PagingList.CreateAsync(result, 5, pageindex, sort, "Nome");
-            model.RouteValue = new RouteValueDictionary { { "filter", filter } };
+            ViewData["CurrentFilter"] = searchString;
 
-            return View(model);
+            var result = _context.Pedidos.AsQueryable();
+
+            if (!String.IsNullOrEmpty(searchString))
+                result = result.Where(p => p.Nome.Contains(searchString));
+
+            return View(await result.AsNoTracking().ToListAsync());
         }
 
         // GET: Admin/AdminPedidos/Details/5
@@ -160,7 +157,7 @@ namespace LanchesMac.Areas.Admin.Controllers
                 .ThenInclude(l => l.Lanche)
                 .FirstOrDefault(p => p.PedidoId == id);
 
-            if(pedido == null)
+            if (pedido == null)
             {
                 Response.StatusCode = 404;
                 return View("PedidoNotFound", id.Value);
@@ -171,7 +168,7 @@ namespace LanchesMac.Areas.Admin.Controllers
                 Pedido = pedido,
                 PedidoDetalhes = pedido.PedidoItens
             };
-            return View(pedidoLanche);                
+            return View(pedidoLanche);
         }
 
         private bool PedidoExists(int id)

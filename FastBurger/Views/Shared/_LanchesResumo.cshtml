@@ -10,9 +10,7 @@
         <p class="card-text">
             @Model.DescricaoCurta
         </p>
-        <div class="card-footer">
-            <a class="btn btn-primary" id="cartButton" asp-controller="CarrinhoCompra"
-               asp-action="AdicionarItemNoCarrinhoCompra" asp-route-LancheId="@Model.LancheId">Adicionar no Carrinho</a>
-        </div>        
+        <a class="btn btn-primary" id="cartButton" asp-controller="CarrinhoCompra"
+           asp-action="AdicionarItemNoCarrinhoCompra" asp-route-LancheId="@Model.LancheId">Adicionar no Carrinho</a>
     </div>
 </div>

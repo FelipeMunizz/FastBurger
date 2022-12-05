@@ -7,7 +7,6 @@ using FastBurger.Services;
 using FastBurger.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using ReflectionIT.Mvc.Paging;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,11 +40,6 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddMemoryCache();
 builder.Services.AddSession();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-builder.Services.AddPaging(options =>
-{
-    options.ViewName = "Bootstrap4";
-    options.PageParameterName = "pageindex";
-});
 
 var app = builder.Build();
 
