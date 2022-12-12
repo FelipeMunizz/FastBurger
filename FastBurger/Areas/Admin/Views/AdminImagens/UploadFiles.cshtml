@@ -1,0 +1,28 @@
+﻿@{
+    ViewData["Title"] = "UploadFiles";
+}
+
+<div class="jumbotron jumbotron-fluid">
+    <div class="container">
+        @if (ViewData["Erro"] != null)
+        {
+            <h4 class="text-danger">@ViewData["Erro"]</h4>
+        }
+    </div>
+</div>
+
+<div class="container">
+    @if (ViewData["Resultado"] != null)
+    {
+        <h4>@ViewData["Resultado"]</h4>
+        <hr />
+        @foreach (string arquivos in ViewBag.Arquivos)
+        {
+            <ul class="list-group">
+                <li class="list-item">
+                    @arquivos
+                </li>
+            </ul>
+        }
+    }
+</div>

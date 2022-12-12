@@ -1,4 +1,7 @@
 ﻿using FastBurger.ViewModels;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -48,6 +51,38 @@ public class AccountController : Controller
         ModelState.AddModelError("", "Falha ao realizar o login!!");
         return View(loginVM);
     }
+
+    #region Login do Google (Tutorial de um indiano maluco(Apos testes faz o login mas quebra no return))
+    //public async Task LoginGoogle()
+    //{
+    //    await HttpContext.ChallengeAsync(GoogleDefaults.AuthenticationScheme, new AuthenticationProperties()
+    //    {
+    //        RedirectUri = Url.Action("GoogleResponse")
+    //    });
+    //}
+
+    //public async Task<IActionResult> GoogleResponse()
+    //{
+    //    var result = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+    //    var claims = result.Principal.Identities.FirstOrDefault().Claims.Select(claim => new
+    //    {
+    //        claim.Issuer,
+    //        claim.OriginalIssuer,
+    //        claim.Type,
+    //        claim.Value
+    //    });
+
+    //    return Json(claims);
+    //}
+
+    //public async Task<IActionResult> LogoutGoogle()
+    //{
+    //    await HttpContext.SignOutAsync();
+
+    //    return RedirectToAction("Login");
+    //}
+    #endregion
+
     #endregion
 
     #region Registro
