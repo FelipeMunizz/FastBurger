@@ -47,6 +47,10 @@ namespace FastBurger.Models
             ErrorMessage = "O email não possui um formato correto")]
         public string Email { get; set; }
 
+        [Required(ErrorMessage = "Informe o CPF")]
+        [StringLength(14)]
+        public string? Documento { get; set; }
+
         [ScaffoldColumn(false)]
         [Column(TypeName = "decimal(18,2)")]
         [Display(Name = "Total do pedido")]
