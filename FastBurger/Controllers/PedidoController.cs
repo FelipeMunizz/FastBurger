@@ -24,7 +24,7 @@ namespace FastBurger.Controllers
 
         [Authorize]
         [HttpPost]
-        public IActionResult Checkout(Pedido pedido)
+        public async IActionResult Checkout(Pedido pedido)
         {
             int totalItensPedido = 0;
             decimal precoTotalPedido = 0;
@@ -54,7 +54,6 @@ namespace FastBurger.Controllers
             #endregion
 
             #region Criação do Pedido
-
             //valida os dados do pedido
             if (ModelState.IsValid)
             {
@@ -65,6 +64,8 @@ namespace FastBurger.Controllers
                 ViewBag.CheckoutCompletoMensagem = "Obrigado pelo seu pedido";
                 ViewBag.TotalPedido = _carrinhoCompra.GetCarrinhoCompraTotal();
 
+                var pedidoMercadoPago = await RequestPedidoMercadoPago(pedido);
+
                 //limpa o carrinho do cliente
                 _carrinhoCompra.LimparCarrinho();
 
@@ -73,6 +74,36 @@ namespace FastBurger.Controllers
             }
             return View(pedido);
             #endregion
+        }
+
+        private async Task<object> RequestPedidoMercadoPago(Pedido pedido)
+        {
+            using System.Net.Http.Headers;
+            var client = new HttpClient();
+            var request = new HttpRequestMessage
+            {
+                Method = HttpMethod.Post,
+                RequestUri = new Uri("https://sandbox.api.pagseguro.com/orders"),
+                Headers =
+    {
+        { "accept", "application/json" },
+        { "Authorization", "sha512-txa/QoWhm5hKGQssT12xSHQchU2ZPttPsCPdYJbRfpCrJ7BUmaCzpDEOj5xc4iBd0QKWF1yxTm1WvEyU/r21nQ==?972B" },
+    },
+                Content = new StringContent("{\"customer\":{\"name\":\"Felipe Muniz\",\"email\":\"contatoninetec@gmail.com\",\"tax_id\":\"35918159851\"},\"items\":[{\"name\":\"Classico\",\"quantity\":1,\"unit_amount\":1290}],\"reference_id\":\"1\"}")
+                {
+                    Headers =
+        {
+            ContentType = new MediaTypeHeaderValue("application/json")
+        }
+                }
+            };
+            using (var response = await client.SendAsync(request))
+            {
+                response.EnsureSuccessStatusCode();
+                var body = await response.Content.ReadAsStringAsync();
+                Console.WriteLine(body);
+            }
+            return new object();
         }
     }
 }
