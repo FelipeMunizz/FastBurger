@@ -3,6 +3,9 @@ using FastBurger.Repository.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Http.Headers;
+using System.Text;
+using System.Text.Json;
+using System.Text.RegularExpressions;
 
 namespace FastBurger.Controllers
 {
@@ -10,6 +13,7 @@ namespace FastBurger.Controllers
     {
         private readonly IPedidoRepository _pedidoRepository;
         private readonly CarrinhoCompra _carrinhoCompra;
+        private string _token = "49E90CBC9A6B45F2B52880EC5FCD972B";
 
         public PedidoController(IPedidoRepository pedidoRepository, CarrinhoCompra carrinhoCompra)
         {
@@ -24,11 +28,19 @@ namespace FastBurger.Controllers
         }
 
         [Authorize]
+        public IActionResult Pagamento()
+        {
+            return View();
+        }
+
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Checkout(Pedido pedido)
         {
             int totalItensPedido = 0;
             decimal precoTotalPedido = 0;
+
+            string publicKey = await CriarPublicKey();
 
             #region Obtem os itens do carrinho de compra do cliente
 
@@ -60,62 +72,110 @@ namespace FastBurger.Controllers
             {
                 //cria o pedido e os detalhes
                 _pedidoRepository.CriarPedido(pedido);
+                var pedidoMercadoPago = await RequestPedidoMercadoPago(pedido);
+                if (pedidoMercadoPago.id == "-15000")
+                    return View(pedido);
 
                 //define as mensagens ao cliente
                 ViewBag.CheckoutCompletoMensagem = "Obrigado pelo seu pedido";
                 ViewBag.TotalPedido = _carrinhoCompra.GetCarrinhoCompraTotal();
-
-                var pedidoMercadoPago = await RequestPedidoMercadoPago(pedido);
-
-                //limpa o carrinho do cliente
-                _carrinhoCompra.LimparCarrinho();
+                ViewBag.id = pedidoMercadoPago.id;
+                ViewBag.publicKey = publicKey;
 
                 //exibe a view com dados do cliente e do pedido
-                return View("~/Views/Pedido/CheckoutCompleto.cshtml", pedido);
+                return RedirectToAction("Pagamento", pedido);
             }
             return View(pedido);
             #endregion
         }
 
-        private async Task<object> RequestPedidoMercadoPago(Pedido pedido)
+        private async Task<ResponsePedidoPagSeguro> RequestPedidoMercadoPago(Pedido pedido)
         {
-            string token = "49E90CBC9A6B45F2B52880EC5FCD972B";
-            var costumers = new Customer
+            Customer costumers = new Customer
             {
                 Name = $"{pedido.Nome} {pedido.Sobrenome}",
                 Email = pedido.Email,
-                Tax_id = pedido.Documento
+                Tax_id = RemoveCaracteresEspeciais(pedido.Documento)
             };
 
-            using (var httpClient = new HttpClient())
+            List<Item> items = new List<Item>();
+            foreach (var itens in pedido.PedidoItens)
             {
-                using (var request = new HttpRequestMessage(new HttpMethod("POST"), "https://sandbox.api.pagseguro.com/orders"))
+                Item item = new Item
                 {
-                    request.Headers.Add("Authorization", $"Bearer {token}");
-                    request.Headers.TryAddWithoutValidation("accept", "application/json");
+                    Name = itens.Lanche.LancheNome,
+                    Quantity = itens.Quantidade,
+                    Unit_amount = Convert.ToInt32(RemoveCaracteresEspeciais(itens.Lanche.Preco.ToString()))
+                };
 
-                    
-                    request.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
-
-                    var response = await httpClient.SendAsync(request);
-                }
+                items.Add(item);
             }
+            Item[] itemsArray = items.ToArray();
 
-            //            Content = new StringContent("{\"customer\":{\"name\":\"Felipe Muniz\",\"email\":\"contatoninetec@gmail.com\",\"tax_id\":\"35918159851\"},\"items\":[{\"name\":\"Classico\",\"quantity\":1,\"unit_amount\":1290}],\"reference_id\":\"1\"}")
-            //            {
-            //                Headers =
-            //    {
-            //        ContentType = new MediaTypeHeaderValue("application/json")
-            //    }
-            //            }
-            //        };
-            //        using (var response = await client.SendAsync(request))
-            //        {
-            //            response.EnsureSuccessStatusCode();
-            //            var body = await response.Content.ReadAsStringAsync();
-            //            Console.WriteLine(body);
-            //}
-            return new object();
+            PagueSeguro pedidoPagSeguro = new PagueSeguro
+            {
+                Customer = costumers,
+                Items = itemsArray,
+                Reference_id = pedido.PedidoId
+            };
+
+            string JsonData = JsonSerializer.Serialize(pedidoPagSeguro).ToLower();
+            Uri url = new Uri("https://sandbox.api.pagseguro.com/orders");
+
+            HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Add("Authorization", $"Bearer {_token}");
+            client.DefaultRequestHeaders.Add("accept", "application/json");
+            HttpContent content = new StringContent(JsonData, Encoding.UTF8, "application/json");
+            try
+            {
+                var response = await client.PostAsync(url, content);
+                string textResponse = await response.Content.ReadAsStringAsync();
+                ResponsePedidoPagSeguro responsePedidoPagSeguro = JsonSerializer.Deserialize<ResponsePedidoPagSeguro>(textResponse);
+                return responsePedidoPagSeguro;
+            }
+            catch (Exception)
+            {
+                return new ResponsePedidoPagSeguro
+                {
+                    id = "-15000"
+                };
+            }
+        }
+
+        private async Task<string> CriarPublicKey()
+        {
+            Dictionary<string, string> data = new Dictionary<string, string>
+            {
+                { "type", "card" }
+            };
+            string JsonData = JsonSerializer.Serialize(data);
+            Uri url = new Uri("https://sandbox.api.pagseguro.com/public-keys");
+
+            HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Add("Authorization", $"Bearer {_token}");
+            client.DefaultRequestHeaders.Add("accept", "application/json");
+            HttpContent content = new StringContent(JsonData, Encoding.UTF8, "application/json");
+            try
+            {
+                var response = await client.PostAsync(url, content);
+                string textResponse = await response.Content.ReadAsStringAsync();
+                ResponsePedidoPagSeguro responsePedidoPagSeguro = JsonSerializer.Deserialize<ResponsePedidoPagSeguro>(textResponse);
+                return responsePedidoPagSeguro.public_key;
+            }
+            catch (Exception)
+            {
+                return string.Empty;
+            }
+        }
+
+        static string RemoveCaracteresEspeciais(string input)
+        {
+            string pattern = "[^a-zA-Z0-9]";
+            string replacement = "";
+            Regex regex = new Regex(pattern);
+
+            string result = regex.Replace(input, replacement);
+            return result;
         }
     }
 }
