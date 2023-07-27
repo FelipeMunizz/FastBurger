@@ -2,6 +2,7 @@
 using FastBurger.Repository.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.Http.Headers;
 
 namespace FastBurger.Controllers
 {
@@ -24,7 +25,7 @@ namespace FastBurger.Controllers
 
         [Authorize]
         [HttpPost]
-        public async IActionResult Checkout(Pedido pedido)
+        public async Task<IActionResult> Checkout(Pedido pedido)
         {
             int totalItensPedido = 0;
             decimal precoTotalPedido = 0;
@@ -78,31 +79,42 @@ namespace FastBurger.Controllers
 
         private async Task<object> RequestPedidoMercadoPago(Pedido pedido)
         {
-            using System.Net.Http.Headers;
-            var client = new HttpClient();
-            var request = new HttpRequestMessage
+            string token = "49E90CBC9A6B45F2B52880EC5FCD972B";
+            var costumers = new Customer
             {
-                Method = HttpMethod.Post,
-                RequestUri = new Uri("https://sandbox.api.pagseguro.com/orders"),
-                Headers =
-    {
-        { "accept", "application/json" },
-        { "Authorization", "sha512-txa/QoWhm5hKGQssT12xSHQchU2ZPttPsCPdYJbRfpCrJ7BUmaCzpDEOj5xc4iBd0QKWF1yxTm1WvEyU/r21nQ==?972B" },
-    },
-                Content = new StringContent("{\"customer\":{\"name\":\"Felipe Muniz\",\"email\":\"contatoninetec@gmail.com\",\"tax_id\":\"35918159851\"},\"items\":[{\"name\":\"Classico\",\"quantity\":1,\"unit_amount\":1290}],\"reference_id\":\"1\"}")
-                {
-                    Headers =
-        {
-            ContentType = new MediaTypeHeaderValue("application/json")
-        }
-                }
+                Name = $"{pedido.Nome} {pedido.Sobrenome}",
+                Email = pedido.Email,
+                Tax_id = pedido.Documento
             };
-            using (var response = await client.SendAsync(request))
+
+            using (var httpClient = new HttpClient())
             {
-                response.EnsureSuccessStatusCode();
-                var body = await response.Content.ReadAsStringAsync();
-                Console.WriteLine(body);
+                using (var request = new HttpRequestMessage(new HttpMethod("POST"), "https://sandbox.api.pagseguro.com/orders"))
+                {
+                    request.Headers.Add("Authorization", $"Bearer {token}");
+                    request.Headers.TryAddWithoutValidation("accept", "application/json");
+
+                    
+                    request.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
+
+                    var response = await httpClient.SendAsync(request);
+                }
             }
+
+            //            Content = new StringContent("{\"customer\":{\"name\":\"Felipe Muniz\",\"email\":\"contatoninetec@gmail.com\",\"tax_id\":\"35918159851\"},\"items\":[{\"name\":\"Classico\",\"quantity\":1,\"unit_amount\":1290}],\"reference_id\":\"1\"}")
+            //            {
+            //                Headers =
+            //    {
+            //        ContentType = new MediaTypeHeaderValue("application/json")
+            //    }
+            //            }
+            //        };
+            //        using (var response = await client.SendAsync(request))
+            //        {
+            //            response.EnsureSuccessStatusCode();
+            //            var body = await response.Content.ReadAsStringAsync();
+            //            Console.WriteLine(body);
+            //}
             return new object();
         }
     }
