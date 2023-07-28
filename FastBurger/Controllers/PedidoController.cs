@@ -80,10 +80,10 @@ namespace FastBurger.Controllers
                 ViewBag.CheckoutCompletoMensagem = "Obrigado pelo seu pedido";
                 ViewBag.TotalPedido = _carrinhoCompra.GetCarrinhoCompraTotal();
                 ViewBag.id = pedidoMercadoPago.id;
-                ViewBag.publicKey = publicKey;
+                ViewBag.PublicKey = publicKey;
 
                 //exibe a view com dados do cliente e do pedido
-                return RedirectToAction("Pagamento", pedido);
+                return View("Pagamento", pedido);
             }
             return View(pedido);
             #endregion
